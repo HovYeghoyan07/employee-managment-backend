@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: employee-managment
+  datasource:
+    url: jdbc:mysql://localhost:3306/employee_managment?createDatabaseIfNotExist=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:rootroot}
+
+
+jwt:
+  secret: YXNkZmYkIyNzZFNEU0RBQVNERksjQEBkc2ZqZGZrZHNqQEAjZHNmZ2ZnZmdeXiYmWipeJSQkI2RzZHMkIyVzZDQ1MDk5KUkjJCg5V0ZTSUo=
+  expiration: 600000
+
+run:
+  security: false
