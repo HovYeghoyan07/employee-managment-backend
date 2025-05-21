@@ -17,6 +17,7 @@ public class Employee {
     private String surname;
     private String phone;
     private double salary;
+    private String picture;
     @ManyToOne
     private Company company;
 }

@@ -16,6 +16,7 @@ public class EmployeeDto {
     private String surname;
     private String phone;
     private double salary;
+    private String picture;
     private CompanyResponseDto company;
 
 }

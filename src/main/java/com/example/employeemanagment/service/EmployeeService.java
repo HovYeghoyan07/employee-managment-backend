@@ -13,11 +13,9 @@ public interface EmployeeService {
 
     Employee getEmployeeById(int id);
 
-    EmployeeDto createEmployee(SaveEmployeeRequest employeeRequest);
+    EmployeeDto createEmployee(SaveEmployeeRequest employeeRequest, MultipartFile pictureName);
 
     void deleteEmployeeById(int id);
-
-    Employee updateEmployee(int id, Employee employee);
 
     EmployeeDto getEmployeeDtoById(int id);
 

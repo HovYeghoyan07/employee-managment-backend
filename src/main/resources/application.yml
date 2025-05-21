@@ -6,6 +6,9 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:rootroot}
 
+picture:
+  upload:
+    path: /Users/macbook/IdeaProjects/employee-managment/pictures
 
 jwt:
   secret: YXNkZmYkIyNzZFNEU0RBQVNERksjQEBkc2ZqZGZrZHNqQEAjZHNmZ2ZnZmdeXiYmWipeJSQkI2RzZHMkIyVzZDQ1MDk5KUkjJCg5V0ZTSUo=

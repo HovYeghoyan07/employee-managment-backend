@@ -29,6 +29,8 @@ public class SaveEmployeeRequest {
     @Positive(message = "Salary must be a positive number")
     private Double salary;
 
+    private String picture;
+
     @Min(value = 1, message = "Company ID must be greater than 0")
     private int companyId;
 

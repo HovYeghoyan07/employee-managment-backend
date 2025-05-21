@@ -6,8 +6,10 @@ import com.example.employeemanagment.entity.Employee;
 import com.example.employeemanagment.mapper.EmployeeMapper;
 import com.example.employeemanagment.repository.EmployeeRepository;
 import com.example.employeemanagment.service.EmployeeService;
+import com.example.employeemanagment.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final FileUtil fileUtil;
 
     @Override
     public List<EmployeeDto> getAllEmployees() {
@@ -29,8 +32,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto createEmployee(SaveEmployeeRequest employeeRequest) {
-        return employeeMapper.toDto(employeeRepository.save(employeeMapper.toEntity(employeeRequest)));
+    public EmployeeDto createEmployee(SaveEmployeeRequest employeeRequest, MultipartFile pictureName) {
+        Employee employee = employeeMapper.toEntity(employeeRequest);
+        fileUtil.uploadImage(employee, pictureName);
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
     @Override
@@ -39,18 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RuntimeException("Employee does not exist");
         }
         employeeRepository.deleteById(id);
-    }
-
-    @Override
-    public Employee updateEmployee(int id, Employee employee) {
-        Employee serviceEmployee = getEmployeeById(id);
-        serviceEmployee.setName(employee.getName());
-        serviceEmployee.setSurname(employee.getSurname());
-        serviceEmployee.setPhone(employee.getPhone());
-        serviceEmployee.setSalary(employee.getSalary());
-        serviceEmployee.setCompany(employee.getCompany());
-        employeeRepository.save(serviceEmployee);
-        return serviceEmployee;
     }
 
     @Override

@@ -5,11 +5,14 @@ import com.example.employeemanagment.dto.SaveEmployeeRequest;
 import com.example.employeemanagment.entity.Employee;
 import com.example.employeemanagment.mapper.EmployeeMapper;
 import com.example.employeemanagment.service.EmployeeService;
+import com.example.employeemanagment.util.FileUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,19 +24,20 @@ public class EmployeeEndpoint {
 
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
+    private final FileUtil fileUtil;
 
     @GetMapping
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    @PostMapping
-    public ResponseEntity<?> createEmployee(@RequestBody @Valid SaveEmployeeRequest employeeRequest) {
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> createEmployee(@RequestPart("employee") @Valid SaveEmployeeRequest employeeRequest, @RequestPart(value = "picture", required = false) MultipartFile picture) {
         if (employeeService.existsByPhone(employeeRequest.getPhone())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Employee already exists");
         }
-        EmployeeDto employeeDto = employeeService.createEmployee(employeeRequest);
+        EmployeeDto employeeDto = employeeService.createEmployee(employeeRequest,picture);
         return ResponseEntity.ok(employeeDto);
     }
 
@@ -52,8 +56,9 @@ public class EmployeeEndpoint {
         employeeService.deleteEmployeeById(id);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable int id, @RequestBody @Valid SaveEmployeeRequest employeeRequest) {
-        return ResponseEntity.ok(employeeService.updateEmployee(id,employeeMapper.toEntity(employeeRequest)));
+    @GetMapping("/employee/picture/{imageId}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String imageId) {
+        byte[] picture = fileUtil.getPicture(imageId);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(picture);
     }
 }
